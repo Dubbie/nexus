@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\InsurerController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Passport\ClientController as PassportClientController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 Route::get('/', [PageController::class, 'home'])->name('home');
 
@@ -14,7 +14,12 @@ Route::middleware('auth')->group(function () {
     Route::middleware('role:developer')->group(function () {
         // Clients
         Route::prefix('client')->group(function () {
-            Route::get('/', [ClientController::class, 'index'])->name('client.index');
+            Route::get('/', [ClientController::class, 'index'])->name('clients.index');
+        });
+
+        // Insurers
+        Route::prefix('insurer')->group(function () {
+            Route::get('/', [InsurerController::class, 'index'])->name('insurers.index');
         });
 
         // Passport

@@ -36,10 +36,18 @@ const logout = () => {
 
                 <SidebarNavLink
                     v-if="hasPermission('view clients')"
-                    :href="route('client.index')"
-                    :active="route().current('client.*')"
+                    :href="route('clients.index')"
+                    :active="route().current('clients.*')"
                 >
                     Clients
+                </SidebarNavLink>
+
+                <SidebarNavLink
+                    v-if="hasPermission('view insurers')"
+                    :href="route('insurers.index')"
+                    :active="route().current('insurers.*')"
+                >
+                    Insurers
                 </SidebarNavLink>
             </div>
 
