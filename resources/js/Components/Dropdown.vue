@@ -36,9 +36,11 @@ const alignmentClasses = computed(() => {
         return 'ltr:origin-top-left rtl:origin-top-right start-0';
     } else if (props.align === 'right') {
         return 'ltr:origin-top-right rtl:origin-top-left end-0';
-    } else {
-        return 'origin-top';
+    } else if (props.align === 'outside-bottom-right') {
+        return 'origin-bottom-left left-full bottom-0';
     }
+
+    return '';
 });
 
 const open = ref(false);

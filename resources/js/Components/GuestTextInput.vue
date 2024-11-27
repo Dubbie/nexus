@@ -11,6 +11,10 @@ const { label, id } = defineProps({
         type: String,
         default: 'text',
     },
+    dark: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const model = defineModel({
@@ -30,7 +34,7 @@ const labelMoved = computed(() => {
 
 const labelClasses = computed(() => {
     if (labelMoved.value) {
-        return 'scale-75 origin-top-left top-1 left-2';
+        return 'scale-75 origin-left top-1 left-2';
     }
 
     return 'top-4 left-4';
@@ -61,14 +65,26 @@ defineExpose({ focus: () => input.value.focus() });
     <div class="relative">
         <label
             :for="inputId"
-            class="absolute block font-bold uppercase tracking-wider text-zinc-600 transition-all md:text-xs"
-            :class="labelClasses"
+            class="absolute block font-bold uppercase tracking-wider transition-all md:text-xs"
+            :class="[
+                labelClasses,
+                {
+                    'text-zinc-600': !dark,
+                    'text-zinc-500': dark,
+                },
+            ]"
             >{{ label }}</label
         >
 
         <input
             :id="inputId"
-            class="w-full rounded-sm border-none bg-zinc-100 px-2 pb-4 pt-8 font-bold ring-2 ring-transparent transition-all hover:bg-zinc-200/60 hover:ring-zinc-200/70 focus:bg-white focus:ring-2 focus:ring-black md:pb-1 md:pt-5"
+            class="w-full rounded-sm border-none px-2 pb-4 pt-8 font-bold ring-2 ring-transparent transition-all focus:ring-2 md:pb-1 md:pt-5"
+            :class="{
+                'bg-zinc-100 hover:bg-zinc-200/60 hover:ring-zinc-200/70 focus:bg-white focus:ring-black':
+                    !dark,
+                'bg-white/5 hover:bg-white/10 hover:ring-white/20 focus:bg-transparent focus:ring-white':
+                    dark,
+            }"
             v-model="model"
             :type="type"
             ref="input"

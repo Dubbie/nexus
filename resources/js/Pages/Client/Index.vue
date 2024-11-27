@@ -1,7 +1,6 @@
 <script setup>
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import GuestTextInput from '@/Components/GuestTextInput.vue';
+import TheButton from '@/Components/TheButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import useClients from '@/composables/useClients';
 import { useForm } from '@inertiajs/vue3';
@@ -33,32 +32,33 @@ onMounted(() => {
                 <form @submit.prevent="submit">
                     <div class="space-y-3">
                         <div>
-                            <InputLabel for="name" value="Name" />
-                            <TextInput
+                            <GuestTextInput
+                                label="Name"
                                 id="name"
                                 type="text"
-                                class="mt-1 block w-full"
                                 v-model="form.name"
                                 required
+                                dark
                             />
                         </div>
 
                         <div>
-                            <InputLabel for="redirect" value="Redirect URL" />
-                            <TextInput
+                            <GuestTextInput
+                                label="Redirect URL"
                                 id="redirect"
                                 type="text"
                                 class="mt-1 block w-full"
                                 v-model="form.redirect"
                                 required
+                                dark
                             />
                         </div>
                     </div>
 
-                    <div class="mt-6">
-                        <PrimaryButton :disabled="form.processing">
+                    <div class="mt-3">
+                        <TheButton color="indigo" :disabled="form.processing">
                             Add Client
-                        </PrimaryButton>
+                        </TheButton>
                     </div>
                 </form>
             </div>
@@ -70,16 +70,14 @@ onMounted(() => {
             <div v-else>
                 <div v-if="clients.length > 0">
                     <div v-for="client in clients" :key="client">
-                        <div
-                            class="rounded-2xl bg-white p-4 ring-1 ring-zinc-300"
-                        >
+                        <div class="bg-zinc-800 p-4">
                             <div class="mb-3 flex justify-between">
                                 <p class="text-2xl font-semibold">
                                     {{ client.name }}
                                 </p>
 
                                 <div
-                                    class="cursor-pointer rounded-xl p-1.5 hover:bg-zinc-200"
+                                    class="cursor-pointer rounded-xl p-1.5 hover:bg-white/5"
                                     @click="deleteClient(client.id)"
                                 >
                                     <svg
@@ -98,10 +96,25 @@ onMounted(() => {
                                     </svg>
                                 </div>
                             </div>
-                            <p>ID: {{ client.id }}</p>
-                            <p>Secret: {{ client.secret }}</p>
-                            <p>Redirect: {{ client.redirect }}</p>
-                            <p>Revoked: {{ client.revoked ? 'Yes' : 'No' }}</p>
+
+                            <div class="grid grid-cols-3 gap-x-6">
+                                <p>ID:</p>
+                                <p class="col-span-2 font-semibold">
+                                    {{ client.id }}
+                                </p>
+                                <p>Secret</p>
+                                <p class="col-span-2 font-semibold">
+                                    {{ client.secret }}
+                                </p>
+                                <p>Redirect</p>
+                                <p class="col-span-2 font-semibold">
+                                    {{ client.redirect }}
+                                </p>
+                                <p>Revoked</p>
+                                <p class="col-span-2 font-semibold">
+                                    {{ client.revoked ? 'Yes' : 'No' }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
