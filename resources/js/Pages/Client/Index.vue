@@ -49,8 +49,8 @@ onMounted(() => {
 <template>
     <AuthenticatedLayout>
         <div class="mx-auto w-full max-w-5xl py-12">
-            <div class="flex justify-between">
-                <h1 class="mb-4 text-3xl font-bold">Clients</h1>
+            <div class="mb-6 flex justify-between">
+                <h1 class="text-3xl font-bold">Clients</h1>
 
                 <div>
                     <TheButton
@@ -70,7 +70,7 @@ onMounted(() => {
                 :submit-client="handleClientSubmission"
             />
 
-            <div class="mt-12">
+            <div>
                 <div class="bg-white p-6 text-black">
                     <div v-if="loading">
                         <p>Loading clients...</p>

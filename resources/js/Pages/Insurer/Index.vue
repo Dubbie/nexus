@@ -7,6 +7,10 @@ import NewInsurerModal from './Partials/NewInsurerModal.vue';
 import { IconPencil, IconX } from '@tabler/icons-vue';
 import EditInsurerModal from './Partials/EditInsurerModal.vue';
 
+defineProps({
+    count: Number,
+});
+
 const {
     isDeleting,
     isSubmitting,
@@ -66,7 +70,7 @@ onMounted(() => {
                 >
                     <template v-if="isLoading">
                         <div class="space-y-3">
-                            <div v-for="i in 10" :key="i">
+                            <div v-for="i in count" :key="i">
                                 <div
                                     class="mb-1 h-5 w-96 animate-pulse bg-zinc-400"
                                 ></div>
