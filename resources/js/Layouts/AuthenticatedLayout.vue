@@ -1,8 +1,26 @@
 <script setup>
 import TheSidebar from '@/Components/TheSidebar.vue';
+import { Head, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const { title } = defineProps({
+    title: String,
+});
+
+const fullTitle = computed(() => {
+    const appName = usePage().props.app.name;
+
+    if (title) {
+        return `${title} - ${appName}`;
+    }
+
+    return appName;
+});
 </script>
 
 <template>
+    <Head :title="fullTitle" />
+
     <div class="bg-pattern flex max-h-svh min-h-svh">
         <div class="min-h-full">
             <TheSidebar />

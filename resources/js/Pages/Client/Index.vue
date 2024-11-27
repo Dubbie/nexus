@@ -48,7 +48,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Clients">
         <TheContainer>
             <div class="mb-6 flex justify-between">
                 <h1 class="text-3xl font-bold">Clients</h1>

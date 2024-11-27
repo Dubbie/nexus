@@ -10,7 +10,7 @@ import { Head } from '@inertiajs/vue3';
 <template>
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Dashboard">
         <TheContainer>
             <h1 class="mb-6 text-3xl font-bold">Dashboard</h1>
 
