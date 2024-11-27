@@ -2,23 +2,26 @@ import { ref } from 'vue';
 
 export default function useInsurers() {
     const insurers = ref([]);
-    const loading = ref(false);
     const error = ref(null);
+    const isSubmitting = ref(false);
+    const isUpdating = ref(false);
+    const isDeleting = ref(false);
+    const isLoading = ref(true);
 
     const getInsurers = async () => {
-        loading.value = true;
+        isLoading.value = true;
         try {
             const response = await axios.get(route('api.insurers.index'));
             insurers.value = response.data;
         } catch (error) {
             console.log(error);
         } finally {
-            loading.value = false;
+            isLoading.value = false;
         }
     };
 
     const submitInsurer = async (name, shortName) => {
-        loading.value = true;
+        isSubmitting.value = true;
         try {
             await axios.post(route('api.insurers.store'), {
                 name: name,
@@ -30,12 +33,12 @@ export default function useInsurers() {
             error.value =
                 err.response?.data?.message || 'Error creating insurer.';
         } finally {
-            loading.value = false;
+            isSubmitting.value = false;
         }
     };
 
     const deleteInsurer = async (insurerId) => {
-        loading.value = true;
+        isDeleting.value = true;
         try {
             await axios.delete(route('api.insurers.destroy', insurerId));
             insurers.value = insurers.value.filter(
@@ -44,12 +47,12 @@ export default function useInsurers() {
         } catch (error) {
             console.log(error);
         } finally {
-            loading.value = false;
+            isDeleting.value = false;
         }
     };
 
     const updateInsurer = async (insurerId, name, shortName) => {
-        loading.value = true;
+        isUpdating.value = true;
         try {
             await axios.put(route('api.insurers.update', insurerId), {
                 name: name,
@@ -61,13 +64,16 @@ export default function useInsurers() {
             error.value =
                 err.response?.data?.message || 'Error updating insurer.';
         } finally {
-            loading.value = false;
+            isUpdating.value = false;
         }
     };
 
     return {
+        isSubmitting,
+        isUpdating,
+        isDeleting,
+        isLoading,
         insurers,
-        loading,
         error,
         getInsurers,
         submitInsurer,

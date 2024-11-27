@@ -2,7 +2,7 @@
 import GuestTextInput from '@/Components/GuestTextInput.vue';
 import Modal from '@/Components/Modal.vue';
 import TheButton from '@/Components/TheButton.vue';
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 
 const props = defineProps({
     show: {
@@ -13,17 +13,18 @@ const props = defineProps({
         type: Function,
         default: () => {},
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
 });
 
-const loading = ref(false);
 const form = reactive({
     name: '',
     short_name: '',
 });
 
 const submit = async () => {
-    loading.value = true;
-
     try {
         await props.submitInsurer(form.name, form.short_name);
 
@@ -33,8 +34,6 @@ const submit = async () => {
     } catch (err) {
         console.error('Error submitting insurer:', err);
         // Handle submission error (e.g., show a message)
-    } finally {
-        loading.value = false;
     }
 };
 
