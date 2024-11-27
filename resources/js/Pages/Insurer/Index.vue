@@ -42,11 +42,12 @@ onMounted(() => {
     <AuthenticatedLayout>
         <div class="mx-auto w-full max-w-5xl py-12">
             <div class="mb-6 flex justify-between">
-                <h1 class="mb-4 text-3xl font-bold">Insurers</h1>
+                <h1 class="text-3xl font-bold">Insurers</h1>
 
                 <div>
                     <TheButton
                         color="indigo"
+                        size="sm"
                         @click="showingNewInsurerModal = true"
                         >New insurer</TheButton
                     >

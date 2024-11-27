@@ -71,14 +71,14 @@ onMounted(() => {
             />
 
             <div class="mt-12">
-                <div v-if="loading">
-                    <p>Loading clients...</p>
-                </div>
+                <div class="bg-white p-6 text-black">
+                    <div v-if="loading">
+                        <p>Loading clients...</p>
+                    </div>
 
-                <div v-else>
-                    <div v-if="clients.length > 0" class="space-y-4">
-                        <div v-for="client in clients" :key="client">
-                            <div class="bg-white p-4 text-black">
+                    <div v-else>
+                        <div v-if="clients.length > 0" class="space-y-4">
+                            <div v-for="client in clients" :key="client">
                                 <div class="mb-3 flex justify-between">
                                     <p class="text-2xl font-semibold">
                                         {{ client.name }}
@@ -125,9 +125,9 @@ onMounted(() => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div v-else>
-                        <p>No clients.</p>
+                        <div v-else>
+                            <p class="font-bold text-zinc-500">No clients.</p>
+                        </div>
                     </div>
                 </div>
             </div>

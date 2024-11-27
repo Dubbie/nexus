@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -45,5 +46,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            // Log the user creation
+            ActivityLog::create([
+                'user_id' => Auth::id() ?? null,
+                'action' => ActivityLog::ACTION_CREATED,
+                'target_type' => self::class,
+                'target_id' => $user->id,
+                'required_permission' => 'view users'
+            ]);
+        });
     }
 }
