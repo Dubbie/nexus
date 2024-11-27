@@ -59,7 +59,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="bg-white p-6 text-black">
+            <div class="bg-white px-6 py-3 text-black">
                 <transition
                     enter-active-class="transition ease-out duration-200"
                     enter-from-class="opacity-0"
@@ -70,8 +70,8 @@ onMounted(() => {
                     mode="out-in"
                 >
                     <template v-if="isLoading">
-                        <div class="space-y-3">
-                            <div v-for="i in count" :key="i">
+                        <div>
+                            <div v-for="i in count" :key="i" class="py-3">
                                 <div
                                     class="mb-1 h-5 w-96 animate-pulse bg-zinc-400"
                                 ></div>
@@ -87,11 +87,11 @@ onMounted(() => {
                             <p>No insurers saved.</p>
                         </div>
 
-                        <div v-else class="space-y-3">
+                        <div v-else>
                             <div
                                 v-for="insurer in insurers"
                                 :key="insurer.short_name"
-                                class="group flex items-start justify-between"
+                                class="group relative flex items-center justify-between py-3"
                             >
                                 <div>
                                     <p class="font-bold">{{ insurer.name }}</p>
@@ -103,16 +103,8 @@ onMounted(() => {
                                 </div>
 
                                 <div
-                                    class="pointer-events-none flex gap-x-1 opacity-0 group-hover:pointer-events-auto group-hover:opacity-100"
+                                    class="pointer-events-none flex gap-x-1 opacity-0 transition-all group-hover:pointer-events-auto group-hover:opacity-100"
                                 >
-                                    <TheButton
-                                        plain
-                                        square
-                                        :disabled="isDeleting"
-                                        @click="editInsurer(insurer)"
-                                    >
-                                        <IconPencil size="20" />
-                                    </TheButton>
                                     <TheButton
                                         plain
                                         square
@@ -121,7 +113,20 @@ onMounted(() => {
                                     >
                                         <IconX size="20" />
                                     </TheButton>
+
+                                    <TheButton
+                                        plain
+                                        square
+                                        :disabled="isDeleting"
+                                        @click="editInsurer(insurer)"
+                                    >
+                                        <IconPencil size="20" />
+                                    </TheButton>
                                 </div>
+
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 my-3 w-[4px] rounded-bl-xl rounded-tl-xl bg-zinc-200 group-hover:opacity-0"
+                                ></div>
                             </div>
                         </div>
                     </template>
