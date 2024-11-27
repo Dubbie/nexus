@@ -21,6 +21,8 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        Role::query()->delete();
+        Permission::query()->delete();
         $this->createRoles();
         $this->createPermissions();
     }
@@ -30,7 +32,10 @@ class RolePermissionSeeder extends Seeder
         $permissions = [
             'edit clients',
             'delete clients',
-            'view clients'
+            'view clients',
+            'view users',
+            'edit users',
+            'delete users',
         ];
 
         foreach ($permissions as $permission) {

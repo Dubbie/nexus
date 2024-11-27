@@ -35,6 +35,14 @@ const logout = () => {
                 </SidebarNavLink>
 
                 <SidebarNavLink
+                    v-if="hasPermission('view users')"
+                    :href="route('users.index')"
+                    :active="route().current('users.*')"
+                >
+                    Users
+                </SidebarNavLink>
+
+                <SidebarNavLink
                     v-if="hasPermission('view clients')"
                     :href="route('clients.index')"
                     :active="route().current('clients.*')"

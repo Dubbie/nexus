@@ -4,7 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import useInsurers from '@/composables/useInsurers';
 import { onMounted, ref } from 'vue';
 import NewInsurerModal from './Partials/NewInsurerModal.vue';
-import { IconPencil, IconX } from '@tabler/icons-vue';
+import { IconEdit, IconX } from '@tabler/icons-vue';
 import EditInsurerModal from './Partials/EditInsurerModal.vue';
 import TheContainer from '@/Components/TheContainer.vue';
 
@@ -59,7 +59,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="bg-white px-6 py-3 text-black">
+            <div class="bg-white px-3 py-3 text-black">
                 <transition
                     enter-active-class="transition ease-out duration-200"
                     enter-from-class="opacity-0"
@@ -71,7 +71,7 @@ onMounted(() => {
                 >
                     <template v-if="isLoading">
                         <div>
-                            <div v-for="i in count" :key="i" class="py-3">
+                            <div v-for="i in count" :key="i" class="p-3">
                                 <div
                                     class="mb-1 h-5 w-96 animate-pulse bg-zinc-400"
                                 ></div>
@@ -91,7 +91,7 @@ onMounted(() => {
                             <div
                                 v-for="insurer in insurers"
                                 :key="insurer.short_name"
-                                class="group relative flex items-center justify-between py-3"
+                                class="group relative flex items-center justify-between p-3 hover:bg-zinc-100"
                             >
                                 <div>
                                     <p class="font-bold">{{ insurer.name }}</p>
@@ -120,7 +120,7 @@ onMounted(() => {
                                         :disabled="isDeleting"
                                         @click="editInsurer(insurer)"
                                     >
-                                        <IconPencil size="20" />
+                                        <IconEdit size="20" />
                                     </TheButton>
                                 </div>
 

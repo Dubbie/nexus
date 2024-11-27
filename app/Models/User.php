@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -35,6 +36,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['formatted_created_at'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -60,5 +63,12 @@ class User extends Authenticatable
                 'required_permission' => 'view users'
             ]);
         });
+    }
+
+    public function formattedCreatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->created_at ? $this->created_at->format('Y.m.d H:i') : null,
+        );
     }
 }

@@ -19,7 +19,7 @@ class ActivityLog extends Model
         'required_permission',
     ];
 
-    protected $with = ['user.id,name'];
+    protected $with = ['user:id,name'];
 
     protected $appends = ['formatted_created_at'];
 

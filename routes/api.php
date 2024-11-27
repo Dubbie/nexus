@@ -3,13 +3,10 @@
 use App\Http\Controllers\Api\ActivityLogController;
 use App\Http\Controllers\Api\InsurerController;
 use App\Http\Controllers\Api\StatisticsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
-
+Route::get('/user/self', [UserController::class, 'self'])->name('api.user.self')->middleware('auth:api');
 Route::get('/insurers', [InsurerController::class, 'index'])->name('api.insurers.index');
 
 Route::middleware('auth:api')->group(function () {
@@ -18,6 +15,19 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/insurers', [InsurerController::class, 'store'])->name('api.insurers.store');
         Route::put('/insurers/{insurer}', [InsurerController::class, 'update'])->name('api.insurers.update');
         Route::delete('/insurers/{insurer}', [InsurerController::class, 'destroy'])->name('api.insurers.destroy');
+
+        Route::prefix('insurer')->group(function () {
+            Route::post('/', [InsurerController::class, 'store'])->name('api.insurers.store');
+            Route::put('/{insurer}', [InsurerController::class, 'update'])->name('api.insurers.update');
+            Route::delete('/{insurer}', [InsurerController::class, 'destroy'])->name('api.insurers.destroy');
+        });
+
+        Route::prefix('user')->group(function () {
+            Route::get('/', [UserController::class, 'index'])->name('api.users.index');
+            Route::post('/', [UserController::class, 'store'])->name('api.users.store');
+            Route::put('/{user}', [UserController::class, 'update'])->name('api.users.update');
+            Route::delete('/{user}', [UserController::class, 'destroy'])->name('api.uses.destroy');
+        });
     });
 
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('api.activity-log.index');
