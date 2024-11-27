@@ -1,11 +1,12 @@
 <script setup>
-import Checkbox from '@/Components/Checkbox.vue';
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import GuestTextInput from '@/Components/GuestTextInput.vue';
+import { computed } from 'vue';
+import IconButton from '@/Components/IconButton.vue';
+import { IconArrowRight } from '@tabler/icons-vue';
+import GuestCheckbox from '@/Components/GuestCheckbox.vue';
 
 defineProps({
     canResetPassword: {
@@ -27,11 +28,17 @@ const submit = () => {
         onFinish: () => form.reset('password'),
     });
 };
+
+const formValid = computed(() => {
+    return form.email.length > 0 && form.password.length > 0;
+});
 </script>
 
 <template>
     <GuestLayout>
         <Head title="Log in" />
+
+        <h5 class="mb-6 pt-12 text-center text-2xl font-bold">Sign in</h5>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
@@ -39,12 +46,10 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
+                <GuestTextInput
+                    label="Email"
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
                     v-model="form.email"
                     required
                     autofocus
@@ -55,12 +60,10 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
+                <GuestTextInput
+                    label="Password"
                     id="password"
                     type="password"
-                    class="mt-1 block w-full"
                     v-model="form.password"
                     required
                     autocomplete="current-password"
@@ -71,29 +74,32 @@ const submit = () => {
 
             <div class="mt-4 block">
                 <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
+                    <GuestCheckbox
+                        name="remember"
+                        v-model:checked="form.remember"
+                    />
+                    <span
+                        class="ms-2 select-none text-sm font-medium text-zinc-900"
                         >Remember me</span
                     >
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="mt-12 flex flex-col items-center">
+                <IconButton
+                    :icon="IconArrowRight"
+                    :disabled="!formValid || form.processing"
+                    size="lg"
+                    class="mb-6"
+                />
+
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="text-sm font-semibold uppercase text-zinc-600 hover:text-zinc-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 md:text-xs"
                 >
-                    Forgot your password?
+                    Can't sign in?
                 </Link>
-
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
             </div>
         </form>
     </GuestLayout>
