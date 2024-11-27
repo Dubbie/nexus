@@ -1,5 +1,5 @@
 <script setup>
-import GuestTextInput from '@/Components/GuestTextInput.vue';
+import ComboTextInput from '@/Components/ComboTextInput.vue';
 import TheButton from '@/Components/TheButton.vue';
 
 const props = defineProps({
@@ -15,7 +15,7 @@ const form = props.modelValue;
         <form @submit.prevent="submitClient">
             <div class="space-y-3">
                 <div>
-                    <GuestTextInput
+                    <ComboTextInput
                         label="Name"
                         id="name"
                         type="text"
@@ -26,7 +26,7 @@ const form = props.modelValue;
                 </div>
 
                 <div>
-                    <GuestTextInput
+                    <ComboTextInput
                         label="Redirect URL"
                         id="redirect"
                         type="text"

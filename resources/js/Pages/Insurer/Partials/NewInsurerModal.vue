@@ -1,5 +1,5 @@
 <script setup>
-import GuestTextInput from '@/Components/GuestTextInput.vue';
+import ComboTextInput from '@/Components/ComboTextInput.vue';
 import Modal from '@/Components/Modal.vue';
 import TheButton from '@/Components/TheButton.vue';
 import { reactive } from 'vue';
@@ -48,7 +48,7 @@ const emit = defineEmits(['close']);
             <form @submit.prevent="submit">
                 <div class="space-y-3">
                     <div>
-                        <GuestTextInput
+                        <ComboTextInput
                             label="Name"
                             id="name"
                             type="text"
@@ -58,7 +58,7 @@ const emit = defineEmits(['close']);
                     </div>
 
                     <div>
-                        <GuestTextInput
+                        <ComboTextInput
                             label="Short name"
                             id="short_name"
                             type="text"

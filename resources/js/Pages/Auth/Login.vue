@@ -2,11 +2,11 @@
 import GuestLayout from '@/Layouts/GuestLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import GuestTextInput from '@/Components/GuestTextInput.vue';
+import ComboTextInput from '@/Components/ComboTextInput.vue';
 import { computed } from 'vue';
 import IconButton from '@/Components/IconButton.vue';
 import { IconArrowRight } from '@tabler/icons-vue';
-import GuestCheckbox from '@/Components/GuestCheckbox.vue';
+import TheCheckbox from '@/Components/TheCheckbox.vue';
 
 defineProps({
     canResetPassword: {
@@ -46,7 +46,7 @@ const formValid = computed(() => {
 
         <form @submit.prevent="submit">
             <div>
-                <GuestTextInput
+                <ComboTextInput
                     label="Email"
                     id="email"
                     type="email"
@@ -60,7 +60,7 @@ const formValid = computed(() => {
             </div>
 
             <div class="mt-4">
-                <GuestTextInput
+                <ComboTextInput
                     label="Password"
                     id="password"
                     type="password"
@@ -74,7 +74,7 @@ const formValid = computed(() => {
 
             <div class="mt-4 block">
                 <label class="flex items-center">
-                    <GuestCheckbox
+                    <TheCheckbox
                         name="remember"
                         v-model:checked="form.remember"
                     />
