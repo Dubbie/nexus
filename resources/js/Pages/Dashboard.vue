@@ -42,7 +42,7 @@ import { Head } from '@inertiajs/vue3';
                 </div>
                 <div>
                     <div class="bg-white p-4 text-black sm:p-6">
-                        <p class="font-bold">Activity</p>
+                        <p class="mb-4 font-bold">Activity</p>
 
                         <DashboardActivity />
                     </div>

@@ -126,7 +126,9 @@ onMounted(() => {
                             </div>
                         </div>
                         <div v-else>
-                            <p class="font-bold text-zinc-500">No clients.</p>
+                            <p class="font-bold text-zinc-500">
+                                No clients saved.
+                            </p>
                         </div>
                     </div>
                 </div>
