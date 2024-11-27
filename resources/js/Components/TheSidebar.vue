@@ -62,10 +62,10 @@ const logout = () => {
                             />
 
                             <div>
-                                <p class="text-sm font-semibold">
+                                <p class="truncate text-sm font-semibold">
                                     {{ $page.props.auth.user.name }}
                                 </p>
-                                <p class="text-xs text-white/50">
+                                <p class="truncate text-xs text-white/50">
                                     {{ $page.props.auth.user.email }}
                                 </p>
                             </div>
