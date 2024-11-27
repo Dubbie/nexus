@@ -17,7 +17,7 @@ const logout = () => {
 <template>
     <div class="h-full w-64 bg-zinc-950 text-white">
         <div class="flex h-full flex-col gap-y-6 px-3">
-            <div class="flex items-center justify-center gap-x-4 pt-6">
+            <div class="flex items-center justify-center gap-x-4 pt-12">
                 <div>
                     <p class="text-center font-bold tracking-tight text-white">
                         <span class="block leading-none">Sunday</span>

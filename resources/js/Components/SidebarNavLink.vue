@@ -15,10 +15,10 @@ defineProps({
 <template>
     <Link
         :href="href"
-        class="block px-3 py-2 text-sm font-medium"
+        class="block px-3 py-2 font-semibold"
         :class="{
             'text-white': active,
-            'text-white/50 hover:text-white/70': !active,
+            'text-white/40 hover:text-white/80': !active,
         }"
     >
         <slot />
