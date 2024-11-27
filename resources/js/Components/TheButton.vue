@@ -65,7 +65,7 @@ const colorClasses = computed(() => {
         blue: 'bg-blue-600 text-white hover:bg-blue-500 ',
         indigo: 'bg-indigo-600 text-white hover:bg-indigo-500',
         white: 'bg-white text-zinc-900 hover:bg-white/95',
-        dark: 'bg-zinc-800 text-white hover:bg-zinc-700',
+        dark: 'bg-zinc-800 text-white hover:bg-zinc-700/60',
     }[props.color];
 });
 

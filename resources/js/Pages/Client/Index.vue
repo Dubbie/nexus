@@ -1,10 +1,10 @@
 <script setup>
-import GuestTextInput from '@/Components/GuestTextInput.vue';
 import TheButton from '@/Components/TheButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import useClients from '@/composables/useClients';
 import { useForm } from '@inertiajs/vue3';
-import { onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import ClientForm from './Partials/ClientForm.vue';
 
 const { clients, loading, getClients, submitClient, deleteClient } =
     useClients();
@@ -14,8 +14,31 @@ const form = useForm({
     redirect: '',
 });
 
-const submit = async () => {
-    await submitClient(form.name, form.redirect);
+const showingNewClientEditor = ref(false);
+
+const newClientButtonLabel = computed(() => {
+    return showingNewClientEditor.value ? 'Cancel' : 'New Client';
+});
+
+const newClientButtonColor = computed(() => {
+    return showingNewClientEditor.value ? 'dark' : 'indigo';
+});
+
+const toggleNewClientEditor = () => {
+    showingNewClientEditor.value = !showingNewClientEditor.value;
+
+    if (!showingNewClientEditor.value) {
+        form.reset();
+    }
+};
+
+const handleClientSubmission = async () => {
+    try {
+        await submitClient(form.name, form.redirect);
+        toggleNewClientEditor();
+    } catch (error) {
+        console.error('Submission failed:', error);
+    }
 };
 
 onMounted(() => {
@@ -26,100 +49,86 @@ onMounted(() => {
 <template>
     <AuthenticatedLayout>
         <div class="mx-auto w-full max-w-5xl py-12">
-            <h1 class="mb-4 text-3xl font-bold">Clients</h1>
+            <div class="flex justify-between">
+                <h1 class="mb-4 text-3xl font-bold">Clients</h1>
 
-            <div class="mb-6">
-                <form @submit.prevent="submit">
-                    <div class="space-y-3">
-                        <div>
-                            <GuestTextInput
-                                label="Name"
-                                id="name"
-                                type="text"
-                                v-model="form.name"
-                                required
-                                dark
-                            />
-                        </div>
-
-                        <div>
-                            <GuestTextInput
-                                label="Redirect URL"
-                                id="redirect"
-                                type="text"
-                                class="mt-1 block w-full"
-                                v-model="form.redirect"
-                                required
-                                dark
-                            />
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <TheButton color="indigo" :disabled="form.processing">
-                            Add Client
-                        </TheButton>
-                    </div>
-                </form>
+                <div>
+                    <TheButton
+                        size="sm"
+                        :color="newClientButtonColor"
+                        @click="toggleNewClientEditor"
+                    >
+                        {{ newClientButtonLabel }}
+                    </TheButton>
+                </div>
             </div>
 
-            <div v-if="loading">
-                <p>Loading clients...</p>
-            </div>
+            <ClientForm
+                v-show="showingNewClientEditor"
+                class="my-6"
+                v-model="form"
+                :submit-client="handleClientSubmission"
+            />
 
-            <div v-else>
-                <div v-if="clients.length > 0">
-                    <div v-for="client in clients" :key="client">
-                        <div class="bg-zinc-800 p-4">
-                            <div class="mb-3 flex justify-between">
-                                <p class="text-2xl font-semibold">
-                                    {{ client.name }}
-                                </p>
+            <div class="mt-12">
+                <div v-if="loading">
+                    <p>Loading clients...</p>
+                </div>
 
-                                <div
-                                    class="cursor-pointer rounded-xl p-1.5 hover:bg-white/5"
-                                    @click="deleteClient(client.id)"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="size-6"
+                <div v-else>
+                    <div v-if="clients.length > 0" class="space-y-4">
+                        <div v-for="client in clients" :key="client">
+                            <div class="bg-white p-4 text-black">
+                                <div class="mb-3 flex justify-between">
+                                    <p class="text-2xl font-semibold">
+                                        {{ client.name }}
+                                    </p>
+
+                                    <div
+                                        class="cursor-pointer rounded-xl p-1.5 hover:bg-white/5"
+                                        @click="deleteClient(client.id)"
                                     >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M6 18 18 6M6 6l12 12"
-                                        />
-                                    </svg>
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="size-6"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M6 18 18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-x-6">
+                                    <p>ID:</p>
+                                    <p class="col-span-2 font-semibold">
+                                        {{ client.id }}
+                                    </p>
+                                    <p>Secret</p>
+                                    <p class="col-span-2 font-semibold">
+                                        {{ client.secret }}
+                                    </p>
+                                    <p>Redirect</p>
+                                    <p class="col-span-2 font-semibold">
+                                        {{ client.redirect }}
+                                    </p>
+                                    <p>Revoked</p>
+                                    <p class="col-span-2 font-semibold">
+                                        {{ client.revoked ? 'Yes' : 'No' }}
+                                    </p>
                                 </div>
                             </div>
-
-                            <div class="grid grid-cols-3 gap-x-6">
-                                <p>ID:</p>
-                                <p class="col-span-2 font-semibold">
-                                    {{ client.id }}
-                                </p>
-                                <p>Secret</p>
-                                <p class="col-span-2 font-semibold">
-                                    {{ client.secret }}
-                                </p>
-                                <p>Redirect</p>
-                                <p class="col-span-2 font-semibold">
-                                    {{ client.redirect }}
-                                </p>
-                                <p>Revoked</p>
-                                <p class="col-span-2 font-semibold">
-                                    {{ client.revoked ? 'Yes' : 'No' }}
-                                </p>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div v-else>
-                    <p>No clients.</p>
+                    <div v-else>
+                        <p>No clients.</p>
+                    </div>
                 </div>
             </div>
         </div>
