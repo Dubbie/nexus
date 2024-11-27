@@ -22,12 +22,12 @@ const formattedType = computed(() => {
 
 <template>
     <div>
-        <div class="flex gap-x-1 text-sm font-semibold">
-            <p class="text-indigo-600">{{ formattedType }}</p>
-            <p class="text-zinc-500">{{ entry.action }}</p>
-            <p class="text-zinc-500">by</p>
-            <p>{{ entry?.user?.name ?? 'System' }}</p>
-        </div>
+        <p class="truncate text-sm font-semibold">
+            <span class="mr-1 text-indigo-600">{{ formattedType }}</span>
+            <span class="mr-1 text-zinc-500">{{ entry.action }}</span>
+            <span class="mr-1 text-zinc-500">by</span>
+            <span>{{ entry?.user?.name ?? 'System' }}</span>
+        </p>
         <p class="text-xs font-medium text-zinc-400">
             {{ entry.formatted_created_at }}
         </p>

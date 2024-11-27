@@ -2,6 +2,7 @@
 import DashboardActivity from '@/Components/DashboardActivity.vue';
 import DashboardStatistics from '@/Components/DashboardStatistics.vue';
 import TheButton from '@/Components/TheButton.vue';
+import TheContainer from '@/Components/TheContainer.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 </script>
@@ -10,7 +11,7 @@ import { Head } from '@inertiajs/vue3';
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="mx-auto w-full max-w-5xl py-12">
+        <TheContainer>
             <h1 class="mb-6 text-3xl font-bold">Dashboard</h1>
 
             <div class="grid grid-cols-3 gap-x-6">
@@ -48,6 +49,6 @@ import { Head } from '@inertiajs/vue3';
                     </div>
                 </div>
             </div>
-        </div>
+        </TheContainer>
     </AuthenticatedLayout>
 </template>

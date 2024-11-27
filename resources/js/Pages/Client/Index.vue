@@ -5,6 +5,7 @@ import useClients from '@/composables/useClients';
 import { useForm } from '@inertiajs/vue3';
 import { computed, onMounted, ref } from 'vue';
 import ClientForm from './Partials/ClientForm.vue';
+import TheContainer from '@/Components/TheContainer.vue';
 
 const { clients, loading, getClients, submitClient, deleteClient } =
     useClients();
@@ -48,7 +49,7 @@ onMounted(() => {
 
 <template>
     <AuthenticatedLayout>
-        <div class="mx-auto w-full max-w-5xl py-12">
+        <TheContainer>
             <div class="mb-6 flex justify-between">
                 <h1 class="text-3xl font-bold">Clients</h1>
 
@@ -133,6 +134,6 @@ onMounted(() => {
                     </div>
                 </div>
             </div>
-        </div>
+        </TheContainer>
     </AuthenticatedLayout>
 </template>

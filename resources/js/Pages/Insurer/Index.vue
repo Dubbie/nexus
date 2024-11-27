@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue';
 import NewInsurerModal from './Partials/NewInsurerModal.vue';
 import { IconPencil, IconX } from '@tabler/icons-vue';
 import EditInsurerModal from './Partials/EditInsurerModal.vue';
+import TheContainer from '@/Components/TheContainer.vue';
 
 defineProps({
     count: Number,
@@ -44,7 +45,7 @@ onMounted(() => {
 
 <template>
     <AuthenticatedLayout>
-        <div class="mx-auto w-full max-w-5xl py-12">
+        <TheContainer>
             <div class="mb-6 flex justify-between">
                 <h1 class="text-3xl font-bold">Insurers</h1>
 
@@ -126,7 +127,7 @@ onMounted(() => {
                     </template>
                 </transition>
             </div>
-        </div>
+        </TheContainer>
 
         <NewInsurerModal
             :show="showingNewInsurerModal"
