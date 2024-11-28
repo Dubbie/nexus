@@ -1,26 +1,47 @@
 import { defineStore } from 'pinia';
+import { watch } from 'vue';
 
 export const createCrudStore = (storeId, resource) => {
     return defineStore(storeId, {
         state: () => ({
             items: [],
+            filters: {
+                query: '',
+            },
             isLoading: true,
             isUpdating: false,
             isDeleting: false,
             isSubmitting: false,
             error: null,
+            debounceTimeout: null,
+            abortController: null,
         }),
 
         actions: {
             async fetchAll() {
+                if (this.abortController) {
+                    this.abortController.abort();
+                }
+
+                this.abortController = new AbortController();
+
                 this.isLoading = true;
                 this.error = null;
                 try {
                     const response = await axios.get(
                         route(`api.${resource}.index`),
+                        {
+                            params: this.filters,
+                            signal: this.abortController.signal,
+                        },
                     );
                     this.items = response.data.data; // Adjust based on your API response structure
                 } catch (error) {
+                    if (error.code === 'ERR_CANCELED') {
+                        console.log('Fetch canceled');
+                        return;
+                    }
+
                     console.error(error);
                     this.error =
                         error.response?.data?.message ||
@@ -87,6 +108,19 @@ export const createCrudStore = (storeId, resource) => {
                 } finally {
                     this.isDeleting = false;
                 }
+            },
+
+            init() {
+                watch(
+                    () => this.filters.query,
+                    () => {
+                        clearTimeout(this.debounceTimeout);
+
+                        this.debounceTimeout = setTimeout(() => {
+                            this.fetchAll();
+                        }, 300);
+                    },
+                );
             },
 
             reset() {

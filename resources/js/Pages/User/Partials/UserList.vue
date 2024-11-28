@@ -1,7 +1,8 @@
 <script setup>
+import Dropdown from '@/Components/Dropdown.vue';
 import TheButton from '@/Components/TheButton.vue';
 import { useUsersStore } from '@/stores/useUsersStore';
-import { IconEdit, IconX } from '@tabler/icons-vue';
+import { IconDotsVertical, IconEdit, IconX } from '@tabler/icons-vue';
 
 const usersStore = useUsersStore();
 
@@ -61,7 +62,7 @@ defineEmits(['edit-user']);
                 <div
                     v-for="user in users"
                     :key="user.id"
-                    class="grid grid-cols-6 items-center gap-x-6"
+                    class="grid grid-cols-6 items-center gap-x-6 border-b py-2 first-of-type:border-t last-of-type:border-b-0"
                 >
                     <div class="col-span-2 py-2 pl-1 pr-3">
                         <p>{{ user.name }}</p>
@@ -76,20 +77,37 @@ defineEmits(['edit-user']);
                         <p>{{ user.formatted_created_at }}</p>
                     </div>
 
-                    <div class="py-2 pl-3 pr-1">
-                        <div class="flex justify-end gap-x-1">
-                            <TheButton plain square @click="deleteUser(user)">
-                                <IconX size="20" />
-                            </TheButton>
+                    <div class="flex justify-end py-2 pl-3 pr-1">
+                        <Dropdown align="right">
+                            <template #trigger>
+                                <TheButton plain square size="sm">
+                                    <IconDotsVertical size="20" />
+                                </TheButton>
+                            </template>
 
-                            <TheButton
-                                plain
-                                square
-                                @click="$emit('edit-user', user)"
-                            >
-                                <IconEdit size="20" />
-                            </TheButton>
-                        </div>
+                            <template #content>
+                                <div>
+                                    <TheButton
+                                        plain
+                                        size="sm"
+                                        class="w-full"
+                                        @click="$emit('edit-user', user)"
+                                    >
+                                        <IconEdit size="20" />
+                                        <span>Edit</span>
+                                    </TheButton>
+                                    <TheButton
+                                        plain
+                                        size="sm"
+                                        class="w-full"
+                                        @click="deleteUser(user)"
+                                    >
+                                        <IconX size="20" />
+                                        <span>Delete</span>
+                                    </TheButton>
+                                </div>
+                            </template>
+                        </Dropdown>
                     </div>
                 </div>
             </div>

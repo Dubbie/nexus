@@ -24,10 +24,18 @@ class UserController extends BaseApiController
         return response()->json($request->user());
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $filters = $request->validate([
+            'query' => 'nullable|string'
+        ]);
+
         try {
-            $data = $this->getModelClass()::with('roles')->get();
+            $query = $this->getModelClass()::with('roles');
+            if (isset($filters['query'])) {
+                $query->search($filters['query']);
+            }
+            $data = $query->get();
             return $this->jsonResponse(true, 'Resource fetched successfully', $data);
         } catch (Exception $e) {
             return $this->jsonResponse(false, $e->getMessage(), null, 500);

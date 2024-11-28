@@ -73,7 +73,13 @@ class User extends Authenticatable
     public function formattedCreatedAt(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->created_at ? $this->created_at->format('Y.m.d H:i') : null,
+            get: fn() => $this->created_at ? $this->created_at->format('M d, Y') : null,
         );
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%')
+            ->orWhere('email', 'like', '%' . $search . '%');
     }
 }

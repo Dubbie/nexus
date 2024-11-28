@@ -38,6 +38,12 @@ import { Head } from '@inertiajs/vue3';
                                 :href="route('insurers.index')"
                                 >Insurers</TheButton
                             >
+                            <TheButton
+                                size="sm"
+                                color="indigo"
+                                :href="route('users.index')"
+                                >Users</TheButton
+                            >
                         </div>
                     </div>
                 </div>

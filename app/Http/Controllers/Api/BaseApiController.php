@@ -11,7 +11,7 @@ abstract class BaseApiController extends Controller
 {
     protected string $modelClass;
 
-    public function index()
+    public function index(Request $request)
     {
         try {
             $data = $this->getModelClass()::all();
