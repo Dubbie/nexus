@@ -65,6 +65,11 @@ class User extends Authenticatable
         });
     }
 
+    protected function getDefaultGuardName(): string
+    {
+        return 'web';
+    }
+
     public function formattedCreatedAt(): Attribute
     {
         return Attribute::make(

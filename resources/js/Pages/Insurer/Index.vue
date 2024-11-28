@@ -1,28 +1,21 @@
 <script setup>
 import TheButton from '@/Components/TheButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import useInsurers from '@/composables/useInsurers';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import NewInsurerModal from './Partials/NewInsurerModal.vue';
 import { IconEdit, IconX } from '@tabler/icons-vue';
 import EditInsurerModal from './Partials/EditInsurerModal.vue';
 import TheContainer from '@/Components/TheContainer.vue';
+import { useInsurersStore } from '@/stores/useInsurersStore';
 
 defineProps({
     count: Number,
 });
 
-const {
-    isDeleting,
-    isSubmitting,
-    isUpdating,
-    isLoading,
-    insurers,
-    getInsurers,
-    submitInsurer,
-    updateInsurer,
-    deleteInsurer,
-} = useInsurers();
+const insurersStore = useInsurersStore();
+const insurers = computed(() => insurersStore.items);
+const isLoading = computed(() => insurersStore.isLoading);
+const isDeleting = computed(() => insurersStore.isDeleting);
 
 const showingNewInsurerModal = ref(false);
 const showingEditInsurerModal = ref(false);
@@ -39,7 +32,11 @@ const closeEditInsurerModal = () => {
 };
 
 onMounted(() => {
-    getInsurers();
+    insurersStore.fetchAll();
+});
+
+onUnmounted(() => {
+    insurersStore.reset();
 });
 </script>
 
@@ -109,7 +106,9 @@ onMounted(() => {
                                         plain
                                         square
                                         :disabled="isDeleting"
-                                        @click="deleteInsurer(insurer.id)"
+                                        @click="
+                                            insurersStore.deleteItem(insurer.id)
+                                        "
                                     >
                                         <IconX size="20" />
                                     </TheButton>
@@ -137,16 +136,12 @@ onMounted(() => {
         <NewInsurerModal
             :show="showingNewInsurerModal"
             @close="showingNewInsurerModal = false"
-            :loading="isSubmitting"
-            :submit-insurer="submitInsurer"
         />
 
         <EditInsurerModal
             :show="showingEditInsurerModal"
             @close="closeEditInsurerModal"
             :insurer="selectedInsurer"
-            :loading="isUpdating"
-            :update-insurer="updateInsurer"
         />
     </AuthenticatedLayout>
 </template>

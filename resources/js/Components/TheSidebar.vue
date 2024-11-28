@@ -57,6 +57,14 @@ const logout = () => {
                 >
                     Insurers
                 </SidebarNavLink>
+
+                <SidebarNavLink
+                    v-if="hasPermission('view users')"
+                    :href="route('roles.index')"
+                    :active="route().current('roles.*')"
+                >
+                    Roles
+                </SidebarNavLink>
             </div>
 
             <div class="pb-3">

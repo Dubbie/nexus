@@ -2,34 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\Insurer;
-use Illuminate\Http\Request;
 
-class InsurerController extends Controller
+class InsurerController extends BaseApiController
 {
-    public function index(Request $request)
+    protected string $modelClass = Insurer::class;
+
+    protected function storeValidationRules(): array
     {
-        return response()->json(Insurer::all());
+        return [
+            'name' => 'required|string|max:255',
+            'short_name' => 'required|string|max:255',
+        ];
     }
 
-    public function store(Request $request)
+    protected function updateValidationRules(): array
     {
-        $insurer = Insurer::create($request->all());
-        return response()->json($insurer);
-    }
-
-    public function update(Request $request, $id)
-    {
-        $insurer = Insurer::find($id);
-        $insurer->update($request->all());
-        return response()->json($insurer);
-    }
-
-    public function destroy(Request $request, $id)
-    {
-        $insurer = Insurer::find($id);
-        $insurer->delete();
-        return response()->json($insurer);
+        return $this->storeValidationRules();
     }
 }

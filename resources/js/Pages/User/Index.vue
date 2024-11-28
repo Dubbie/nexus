@@ -3,9 +3,11 @@ import TheButton from '@/Components/TheButton.vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TheContainer from '@/Components/TheContainer.vue';
 import { useUsersStore } from '@/stores/useUsersStore';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import UserListHeader from './Partials/UserListHeader.vue';
 import UserList from './Partials/UserList.vue';
+import NewUserModal from './Partials/NewUserModal.vue';
+import EditUserModal from './Partials/EditUserModal.vue';
 
 defineProps({
     count: Number,
@@ -13,8 +15,26 @@ defineProps({
 
 const usersStore = useUsersStore();
 
+const showingNewUserModal = ref(false);
+const showingEditUserModal = ref(false);
+const selectedUser = ref(null);
+
+const handleEditUser = (user) => {
+    selectedUser.value = user;
+    showingEditUserModal.value = true;
+};
+
+const closeEditUserModal = () => {
+    showingEditUserModal.value = false;
+    selectedUser.value = null;
+};
+
 onMounted(() => {
-    usersStore.fetchUsers();
+    usersStore.fetchAll();
+});
+
+onUnmounted(() => {
+    usersStore.reset();
 });
 </script>
 
@@ -25,7 +45,12 @@ onMounted(() => {
                 <h1 class="text-3xl font-bold">Users</h1>
 
                 <div>
-                    <TheButton color="indigo" size="sm">New user</TheButton>
+                    <TheButton
+                        color="indigo"
+                        size="sm"
+                        @click="showingNewUserModal = true"
+                        >New user</TheButton
+                    >
                 </div>
             </div>
 
@@ -33,10 +58,22 @@ onMounted(() => {
                 <UserListHeader />
 
                 <UserList
-                    :users="usersStore.users"
+                    :users="usersStore.items"
                     :loading="usersStore.isLoading"
+                    @edit-user="handleEditUser"
                 />
             </div>
         </TheContainer>
+
+        <NewUserModal
+            :show="showingNewUserModal"
+            @close="showingNewUserModal = false"
+        />
+
+        <EditUserModal
+            :show="showingEditUserModal"
+            @close="closeEditUserModal"
+            :user="selectedUser"
+        />
     </AuthenticatedLayout>
 </template>

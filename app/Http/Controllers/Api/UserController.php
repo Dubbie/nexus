@@ -2,43 +2,55 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
+use Exception;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserController extends BaseApiController
 {
+    private UserService $userService;
+    protected string $modelClass = User::class;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function self(Request $request)
     {
         return response()->json($request->user());
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        return response()->json(User::with('roles')->get());
+        try {
+            $data = $this->getModelClass()::with('roles')->get();
+            return $this->jsonResponse(true, 'Resource fetched successfully', $data);
+        } catch (Exception $e) {
+            return $this->jsonResponse(false, $e->getMessage(), null, 500);
+        }
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(Request $request, ?callable $handler = null)
     {
-        $data = $request->validated();
-
-        // TODO: User service to create the user
-        return response()->json($data);
+        return parent::store($request, fn($data) => $this->userService->createUser($data));
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(Request $request, $id, ?callable $handler = null)
     {
-        $data = $request->validated();
-
-        // TODO: User service to update the user
-        return response()->json($data);
+        return parent::update($request, $id, fn($data) => $this->userService->updateUser($id, $data));
     }
 
-    public function destroy(User $user)
+    protected function storeValidationRules(): array
     {
-        // TODO: User service to delete the user
-        return response()->json($user);
+        return (new StoreUserRequest())->rules();
+    }
+
+    protected function updateValidationRules(): array
+    {
+        return (new UpdateUserRequest())->rules();
     }
 }

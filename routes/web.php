@@ -5,6 +5,7 @@ use App\Http\Controllers\InsurerController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\Passport\ClientController as PassportClientController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
         // Users
         Route::prefix('user')->group(function () {
             Route::get('/', [UserController::class, 'index'])->name('users.index');
+        });
+
+        // Roles
+        Route::prefix('role')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('roles.index');
         });
 
         // Passport

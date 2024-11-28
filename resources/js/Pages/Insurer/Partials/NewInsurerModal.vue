@@ -2,22 +2,18 @@
 import ComboTextInput from '@/Components/ComboTextInput.vue';
 import Modal from '@/Components/Modal.vue';
 import TheButton from '@/Components/TheButton.vue';
-import { reactive } from 'vue';
+import { useInsurersStore } from '@/stores/useInsurersStore';
+import { computed, reactive } from 'vue';
 
-const props = defineProps({
+defineProps({
     show: {
         type: Boolean,
         default: false,
     },
-    submitInsurer: {
-        type: Function,
-        default: () => {},
-    },
-    loading: {
-        type: Boolean,
-        default: false,
-    },
 });
+
+const insurersStore = useInsurersStore();
+const isLoading = computed(() => insurersStore.isLoading);
 
 const form = reactive({
     name: '',
@@ -26,7 +22,7 @@ const form = reactive({
 
 const submit = async () => {
     try {
-        await props.submitInsurer(form.name, form.short_name);
+        await insurersStore.createItem(form);
 
         // Reset the form and close the modal
         form.value = { name: '', short_name: '' };
@@ -76,7 +72,7 @@ const emit = defineEmits(['close']);
                         type="submit"
                         size="sm"
                         color="indigo"
-                        :disabled="loading"
+                        :disabled="isLoading"
                         >Save insurer</TheButton
                     >
                 </div>

@@ -1,6 +1,9 @@
 <script setup>
 import TheButton from '@/Components/TheButton.vue';
+import { useUsersStore } from '@/stores/useUsersStore';
 import { IconEdit, IconX } from '@tabler/icons-vue';
+
+const usersStore = useUsersStore();
 
 const { users } = defineProps({
     users: {
@@ -23,6 +26,14 @@ const formatSpecificRole = (role) => {
     // Uppercase first
     return role.charAt(0).toUpperCase() + role.slice(1);
 };
+
+const deleteUser = (user) => {
+    if (confirm('Are you sure you want to delete this user?')) {
+        usersStore.deleteItem(user.id);
+    }
+};
+
+defineEmits(['edit-user']);
 </script>
 
 <template>
@@ -67,11 +78,15 @@ const formatSpecificRole = (role) => {
 
                     <div class="py-2 pl-3 pr-1">
                         <div class="flex justify-end gap-x-1">
-                            <TheButton plain square>
+                            <TheButton plain square @click="deleteUser(user)">
                                 <IconX size="20" />
                             </TheButton>
 
-                            <TheButton plain square>
+                            <TheButton
+                                plain
+                                square
+                                @click="$emit('edit-user', user)"
+                            >
                                 <IconEdit size="20" />
                             </TheButton>
                         </div>

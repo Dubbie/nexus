@@ -2,7 +2,8 @@
 import ComboTextInput from '@/Components/ComboTextInput.vue';
 import Modal from '@/Components/Modal.vue';
 import TheButton from '@/Components/TheButton.vue';
-import { reactive, watch } from 'vue';
+import { useInsurersStore } from '@/stores/useInsurersStore';
+import { computed, reactive, ref, watch } from 'vue';
 
 const props = defineProps({
     show: {
@@ -10,25 +11,21 @@ const props = defineProps({
         default: false,
     },
     insurer: Object,
-    loading: {
-        type: Boolean,
-        default: false,
-    },
-    updateInsurer: {
-        type: Function,
-        default: () => {},
-    },
 });
 
+const insurersStore = useInsurersStore();
+
+const isUpdating = computed(() => insurersStore.isUpdating);
+
+const insurerId = ref(null);
 const form = reactive({
-    id: null,
     name: '',
     short_name: '',
 });
 
 const submit = async () => {
     try {
-        await props.updateInsurer(form.id, form.name, form.short_name);
+        await insurersStore.updateItem(insurerId.value, form);
 
         // Reset the form and close the modal
         form.value = { name: '', short_name: '' };
@@ -45,11 +42,11 @@ watch(
     () => props.insurer,
     () => {
         if (props.insurer) {
-            form.id = props.insurer.id;
+            insurerId.value = props.insurer.id;
             form.name = props.insurer.name;
             form.short_name = props.insurer.short_name;
         } else {
-            form.id = null;
+            insurerId.value = null;
             form.name = '';
             form.short_name = '';
         }
@@ -93,7 +90,7 @@ watch(
                         type="submit"
                         size="sm"
                         color="indigo"
-                        :disabled="loading"
+                        :disabled="isUpdating"
                         >Update insurer</TheButton
                     >
                 </div>
