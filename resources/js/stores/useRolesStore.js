@@ -1,3 +1,3 @@
 import { createCrudStore } from './baseCrudStore';
 
-export const useRolesStore = createCrudStore('roles', 'roles');
+export const useRolesStore = createCrudStore('roles', 'role');

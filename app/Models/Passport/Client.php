@@ -8,6 +8,7 @@ class Client extends BaseClient
 {
     public function skipsAuthorization()
     {
-        return false;
+        // Decide based on if the client is trusted
+        return $this->trusted ?? false;
     }
 }

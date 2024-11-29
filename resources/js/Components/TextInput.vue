@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
-const { dark } = defineProps({
-    dark: {
-        type: Boolean,
-        default: false,
+const { size } = defineProps({
+    size: {
+        type: String,
+        default: 'md',
     },
 });
 
@@ -14,6 +14,13 @@ const model = defineModel({
 });
 
 const input = ref(null);
+
+const sizeClasses = computed(() => {
+    return {
+        sm: 'text-sm rounded-lg h-8 px-3',
+        md: 'text-sm rounded-lg h-10 px-4',
+    }[size];
+});
 
 onMounted(() => {
     if (input.value.hasAttribute('autofocus')) {
@@ -26,13 +33,8 @@ defineExpose({ focus: () => input.value.focus() });
 
 <template>
     <input
-        class="rounded-sm border-transparent font-semibold shadow-sm ring-2 focus:border-transparent focus:ring-2"
-        :class="{
-            'bg-white/10 text-white ring-transparent backdrop-blur-lg hover:ring-white/20 focus:ring-white':
-                dark,
-            'border-gray-300 bg-white text-black ring-transparent focus:ring-black':
-                !dark,
-        }"
+        class="border-none shadow shadow-black/5 ring-1 ring-inset ring-zinc-200 hover:ring-zinc-300 focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+        :class="[sizeClasses]"
         v-model="model"
         ref="input"
     />

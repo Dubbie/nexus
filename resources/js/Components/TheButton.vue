@@ -63,7 +63,7 @@ const colorClasses = computed(() => {
         red: 'bg-red-600 text-white hover:bg-red-700',
         green: 'bg-green-500 text-white hover:bg-green-400 ',
         blue: 'bg-blue-600 text-white hover:bg-blue-500 ',
-        indigo: 'bg-indigo-600 text-white hover:bg-indigo-500',
+        indigo: 'bg-indigo-500 text-white hover:bg-indigo-400',
         white: 'bg-white text-zinc-900 hover:bg-white/95',
         dark: 'bg-zinc-800 text-white hover:bg-zinc-700/60',
     }[props.color];
@@ -81,9 +81,9 @@ const sizeClasses = computed(() => {
 
     return {
         xs: 'px-2 py-1 text-xs',
-        sm: 'px-4 py-2 text-sm',
-        md: 'px-6 py-3',
-        lg: 'px-4 py-2 text-sm',
+        sm: 'px-4 py-2 rounded-lg text-sm font-medium',
+        md: 'px-4 py-2 rounded-lg text-sm font-medium',
+        lg: 'px-4 py-2 text-sm font-semibold',
     }[props.size];
 });
 
@@ -108,7 +108,7 @@ const squareClasses = computed(() => {
     <component
         :is="href ? Link : 'button'"
         :href="href"
-        class="relative flex items-center space-x-2 font-semibold"
+        class="relative flex items-center space-x-1.5"
         :class="[
             colorClasses,
             sizeClasses,

@@ -9,18 +9,23 @@ defineProps({
     active: {
         type: Boolean,
     },
+    icon: {
+        type: Function,
+        required: true,
+    },
 });
 </script>
 
 <template>
     <Link
         :href="href"
-        class="block px-3 py-2 font-semibold"
+        class="flex gap-x-2 rounded-lg px-3 py-2 text-sm font-semibold"
         :class="{
-            'text-white': active,
-            'text-white/40 hover:text-white/80': !active,
+            'bg-black/5 text-zinc-700': active,
+            'text-zinc-500 hover:text-zinc-600': !active,
         }"
     >
-        <slot />
+        <component :is="icon" size="20" />
+        <span><slot /></span>
     </Link>
 </template>

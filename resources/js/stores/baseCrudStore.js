@@ -42,10 +42,7 @@ export const createCrudStore = (storeId, resource) => {
                         return;
                     }
 
-                    console.error(error);
-                    this.error =
-                        error.response?.data?.message ||
-                        'Failed to fetch resources.';
+                    this.handleError(error, 'fetch');
                 } finally {
                     this.isLoading = false;
                 }
@@ -61,10 +58,7 @@ export const createCrudStore = (storeId, resource) => {
                     );
                     this.items.push(response.data.data); // Add new item to the list
                 } catch (error) {
-                    console.error(error);
-                    this.error =
-                        error.response?.data?.message ||
-                        'Failed to create resource.';
+                    this.handleError(error, 'create');
                 } finally {
                     this.isSubmitting = false;
                 }
@@ -83,10 +77,7 @@ export const createCrudStore = (storeId, resource) => {
                     );
                     if (index !== -1) this.items[index] = response.data.data; // Update item in the list
                 } catch (error) {
-                    console.error(error);
-                    this.error =
-                        error.response?.data?.message ||
-                        'Failed to update resource.';
+                    this.handleError(error, 'update');
                 } finally {
                     this.isUpdating = false;
                 }
@@ -101,10 +92,7 @@ export const createCrudStore = (storeId, resource) => {
                     );
                     this.items = this.items.filter((item) => item.id !== id); // Remove item from the list
                 } catch (error) {
-                    console.error(error);
-                    this.error =
-                        error.response?.data?.message ||
-                        'Failed to delete resource.';
+                    this.handleError(error, 'delete');
                 } finally {
                     this.isDeleting = false;
                 }
@@ -123,13 +111,20 @@ export const createCrudStore = (storeId, resource) => {
                 );
             },
 
+            // Helper method to handle errors consistently
+            handleError(error, action) {
+                console.error(error);
+                this.error =
+                    error.response?.data?.message ||
+                    `Failed to ${action} resource.`;
+            },
+
             reset() {
-                this.items = [];
-                this.isLoading = true;
-                this.isUpdating = false;
-                this.isDeleting = false;
-                this.isSubmitting = false;
-                this.error = null;
+                // Reset to initial state
+                const initialState = this.$state;
+                Object.keys(initialState).forEach((key) => {
+                    this[key] = initialState[key];
+                });
             },
         },
     });

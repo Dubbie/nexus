@@ -4,6 +4,13 @@ import SidebarNavLink from './SidebarNavLink.vue';
 import { useForm, usePage } from '@inertiajs/vue3';
 import Dropdown from './Dropdown.vue';
 import DropdownLink from './DropdownLink.vue';
+import {
+    IconHome,
+    IconLock,
+    IconShield,
+    IconUsers,
+    IconWorld,
+} from '@tabler/icons-vue';
 
 const { hasPermission } = usePermissions(usePage().props.auth.user);
 
@@ -15,21 +22,20 @@ const logout = () => {
 </script>
 
 <template>
-    <div class="h-full w-64 bg-zinc-950 text-white">
+    <div class="h-full w-64 border-r border-zinc-200 bg-white">
         <div class="flex h-full flex-col gap-y-6 px-3">
-            <div class="flex items-center justify-center gap-x-4 pt-12">
-                <div>
-                    <p class="text-center font-bold tracking-tight text-white">
-                        <span class="block leading-none">Sunday</span>
-                        <span class="block text-3xl/none">Nexus</span>
-                    </p>
-                </div>
+            <div class="px-3 pt-6">
+                <p class="font-bold tracking-tight text-black">
+                    <span class="mr-1 text-zinc-800">Sunday</span>
+                    <span class="text-indigo-600">Nexus</span>
+                </p>
             </div>
 
             <div class="grow">
                 <SidebarNavLink
                     :href="route('dashboard')"
                     :active="route().current('dashboard')"
+                    :icon="IconHome"
                 >
                     Dashboard
                 </SidebarNavLink>
@@ -38,6 +44,7 @@ const logout = () => {
                     v-if="hasPermission('view users')"
                     :href="route('users.index')"
                     :active="route().current('users.*')"
+                    :icon="IconUsers"
                 >
                     Users
                 </SidebarNavLink>
@@ -46,6 +53,7 @@ const logout = () => {
                     v-if="hasPermission('view clients')"
                     :href="route('clients.index')"
                     :active="route().current('clients.*')"
+                    :icon="IconWorld"
                 >
                     Clients
                 </SidebarNavLink>
@@ -54,6 +62,7 @@ const logout = () => {
                     v-if="hasPermission('view insurers')"
                     :href="route('insurers.index')"
                     :active="route().current('insurers.*')"
+                    :icon="IconShield"
                 >
                     Insurers
                 </SidebarNavLink>
@@ -62,6 +71,7 @@ const logout = () => {
                     v-if="hasPermission('view users')"
                     :href="route('roles.index')"
                     :active="route().current('roles.*')"
+                    :icon="IconLock"
                 >
                     Roles
                 </SidebarNavLink>
@@ -81,7 +91,7 @@ const logout = () => {
                                 <p class="truncate text-sm font-semibold">
                                     {{ $page.props.auth.user.name }}
                                 </p>
-                                <p class="truncate text-xs text-white/50">
+                                <p class="truncate text-xs text-zinc-500">
                                     {{ $page.props.auth.user.email }}
                                 </p>
                             </div>

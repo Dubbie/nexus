@@ -6,59 +6,91 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
-use Exception;
 use Illuminate\Http\Request;
+
+/**
+ * Controller for managing user resources through the API
+ * 
+ * This controller extends the BaseApiController to provide CRUD operations for users,
+ * along with additional functionality for user authentication and token validation.
+ * It uses form requests for validation and a UserService for business logic.
+ *
+ * @package App\Http\Controllers\Api
+ */
 
 class UserController extends BaseApiController
 {
-    private UserService $userService;
     protected string $modelClass = User::class;
+    protected ?string $storeRequest = StoreUserRequest::class;
+    protected ?string $updateRequest = UpdateUserRequest::class;
 
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
+    public function __construct(
+        private readonly UserService $userService
+    ) {}
 
+    /**
+     * Get the authenticated user with their roles
+     *
+     * @param Request $request The incoming HTTP request
+     * @return JsonResponse The authenticated user data
+     */
     public function self(Request $request)
     {
-        return response()->json($request->user());
+        return response()->json($request->user()->load('roles'));
     }
 
-    public function index(Request $request)
+    /**
+     * Validate that the current token is valid
+     *
+     * @param Request $request The incoming HTTP request
+     * @return JsonResponse A success message if token is valid
+     */
+    public function validateToken(Request $request)
+    {
+        return response()->json(['message' => 'Token is valid']);
+    }
+
+    /**
+     * Handle the index request with optional search filtering
+     *
+     * @param Request $request The incoming HTTP request
+     * @return mixed Collection of users with their roles
+     */
+    protected function handleIndex(Request $request): mixed
     {
         $filters = $request->validate([
             'query' => 'nullable|string'
         ]);
 
-        try {
-            $query = $this->getModelClass()::with('roles');
-            if (isset($filters['query'])) {
-                $query->search($filters['query']);
-            }
-            $data = $query->get();
-            return $this->jsonResponse(true, 'Resource fetched successfully', $data);
-        } catch (Exception $e) {
-            return $this->jsonResponse(false, $e->getMessage(), null, 500);
+        $query = $this->getModelClass()::with('roles');
+
+        if (isset($filters['query'])) {
+            $query->search($filters['query']);
         }
+
+        return $query->get();
     }
 
-    public function store(Request $request, ?callable $handler = null)
+    /**
+     * Handle storing a new user
+     *
+     * @param array $validatedData The validated request data
+     * @return mixed The created user
+     */
+    protected function handleStore(array $validatedData): mixed
     {
-        return parent::store($request, fn($data) => $this->userService->createUser($data));
+        return $this->userService->createUser($validatedData);
     }
 
-    public function update(Request $request, $id, ?callable $handler = null)
+    /**
+     * Handle updating an existing user
+     *
+     * @param string|int $id The ID of the user to update
+     * @param array $validatedData The validated request data
+     * @return mixed The updated user
+     */
+    protected function handleUpdate(string|int $id, array $validatedData): mixed
     {
-        return parent::update($request, $id, fn($data) => $this->userService->updateUser($id, $data));
-    }
-
-    protected function storeValidationRules(): array
-    {
-        return (new StoreUserRequest())->rules();
-    }
-
-    protected function updateValidationRules(): array
-    {
-        return (new UpdateUserRequest())->rules();
+        return $this->userService->updateUser($id, $validatedData);
     }
 }
